@@ -1,6 +1,7 @@
 buildscript {
   ext {
     springBootVersion = '2.1.0.M3'
+    kotlinVersion = '1.3.21'
   }
   repositories {
     jcenter()
@@ -9,6 +10,8 @@ buildscript {
   dependencies {
     classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.14.2"
     classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+
   }
 }
 
@@ -107,8 +110,8 @@ project(':streams') {
   dependencies {
     compile project(':core')
 
-    compile 'org.apache.kafka:kafka-streams:2.0.0'
-    compile 'io.confluent:monitoring-interceptors:5.0.0'
+    compile 'org.apache.kafka:kafka-streams:2.1.0'
+    compile 'io.confluent:monitoring-interceptors:5.1.2'
 
 //  compile 'io.confluent:kafka-avro-serializer:3.3.0'
 //  compile 'io.confluent:kafka-schema-registry-client:3.3.0'
@@ -154,5 +157,14 @@ project(':spring-streams') {
 //      mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
       mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
     }
+  }
+}
+
+project(':kotlin-streams') {
+  apply plugin: 'kotlin'
+
+  dependencies {
+    compile project(':streams')
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
   }
 }
