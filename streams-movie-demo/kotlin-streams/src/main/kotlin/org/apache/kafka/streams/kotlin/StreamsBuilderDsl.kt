@@ -10,15 +10,15 @@ import org.apache.kafka.streams.kstream.KTable
 annotation class KStreamsDsl
 
 @KStreamsDsl
-fun createTopology(block: StreamsBuilder.() -> Unit): Topology = StreamsBuilder().also(block).build()
+inline fun createTopology(block: StreamsBuilder.() -> Unit): Topology = StreamsBuilder().also(block).build()
 
 @KStreamsDsl
-fun <T, U> StreamsBuilder.kstream(topic: Collection<String>, block: KStream<T, U>.() -> Unit): KStream<T, U> =
+inline fun <T, U> StreamsBuilder.kstream(topic: Collection<String>, block: KStream<T, U>.() -> Unit = {}): KStream<T, U> =
         stream<T, U>(topic).also(block)
 
 @KStreamsDsl
-fun <K, V> KStream<K, V>.groupByKey(block: KGroupedStream<K, V>.() -> Unit): KGroupedStream<K, V> =
-        groupByKey().also(block)
+inline fun <K, V> KStream<K, V>.groupByKey(block: KGroupedStream<K, V>.() -> Unit): KGroupedWithParent<K, V> =
+        groupByKey().also(block).withParent(this)
 
 @KStreamsDsl
-fun <K, V> KGroupedStream<K, V>.count(block: KTable<K, Long>.() -> Unit): KTable<K, Long> = count().also(block)
+inline fun <K, V> KGroupedStream<K, V>.count(block: KTable<K, Long>.() -> Unit): KTable<K, Long> = count().also(block)

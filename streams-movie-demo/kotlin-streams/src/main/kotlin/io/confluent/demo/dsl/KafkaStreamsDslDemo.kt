@@ -9,14 +9,10 @@ import java.util.*
 
 fun main() {
   val topology = createTopology {
-    kstream<String, Long>(listOf("A", "B")) {
-      groupByKey {
-        count {}.toStream()
-      }
-    }.to("group-by-counts",
-            producedWith<String, Long>())
+    kstream<String, Long>(listOf("A", "B"))
+            .groupByKey { count().toStream() }
+            .to("group-by-counts", producedWith<String, Long>())
   }
-
   // just debug
   println(topology.describe().toString())
 
